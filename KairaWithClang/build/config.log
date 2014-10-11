@@ -1,0 +1,66 @@
+# project Kaira (1.2) configured on Tue Aug 12 11:28:13 2014 by
+# waf 1.7.9 (abi 98, python 20703f0 on linux2)
+# using ./waf configure --disable-octave
+#
+----------------------------------------
+Setting top to
+/home/honza/Plocha/kaira-git
+----------------------------------------
+Setting out to
+/home/honza/Plocha/kaira-git/build
+----------------------------------------
+Checking for program g++,c++
+/usr/bin/g++
+find program=['g++', 'c++'] paths=['/usr/lib/lightdm/lightdm', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games'] var='CXX' -> '/usr/bin/g++'
+----------------------------------------
+Checking for program ar
+/usr/bin/ar
+find program=['ar'] paths=['/usr/lib/lightdm/lightdm', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games'] var='AR' -> '/usr/bin/ar'
+------------------------------------------
+Checking for header google/sparse_hash_map
+==>
+#include <google/sparse_hash_map>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] [32mcxx: build/.conf_check_e6fae289859f047b058ca2254569fcb4/test.cpp -> build/.conf_check_e6fae289859f047b058ca2254569fcb4/testbuild/test.cpp.1.o
+[0m
+['/usr/bin/g++', '-O2', '-g', '-fPIC', '-Wall', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
+[2/2] [33mcxxprogram: build/.conf_check_e6fae289859f047b058ca2254569fcb4/testbuild/test.cpp.1.o -> build/.conf_check_e6fae289859f047b058ca2254569fcb4/testbuild/testprog
+[0m
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/honza/Plocha/kaira-git/build/.conf_check_e6fae289859f047b058ca2254569fcb4/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
+yes
+------------------------------------------
+Checking for header mhash.h
+==>
+#include <mhash.h>
+
+int main(int argc, char **argv) {
+	(void)argc; (void)argv;
+	return 0;
+}
+
+<==
+[1/2] [32mcxx: build/.conf_check_ecdacce4470b82c57df426ddad4d76fb/test.cpp -> build/.conf_check_ecdacce4470b82c57df426ddad4d76fb/testbuild/test.cpp.1.o
+[0m
+['/usr/bin/g++', '-O2', '-g', '-fPIC', '-Wall', '-DHAVE_GOOGLE_SPARSE_HASH_MAP=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
+[2/2] [33mcxxprogram: build/.conf_check_ecdacce4470b82c57df426ddad4d76fb/testbuild/test.cpp.1.o -> build/.conf_check_ecdacce4470b82c57df426ddad4d76fb/testbuild/testprog
+[0m
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/honza/Plocha/kaira-git/build/.conf_check_ecdacce4470b82c57df426ddad4d76fb/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lmhash']
+yes
+------------------------------------------
+Checking for program asciidoc
+/usr/bin/asciidoc
+find program=['asciidoc'] paths=['/usr/lib/lightdm/lightdm', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games'] var='ASCIIDOC' -> '/usr/bin/asciidoc'
+------------------------------------------
+Checking for program mpicc
+/usr/bin/mpicc
+find program=['mpicc'] paths=['/usr/lib/lightdm/lightdm', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games'] var='MPICC' -> '/usr/bin/mpicc'
+------------------------------------------
+Checking for program mpic++
+/usr/bin/mpic++
+find program=['mpic++'] paths=['/usr/lib/lightdm/lightdm', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games'] var='MPICXX' -> '/usr/bin/mpic++'

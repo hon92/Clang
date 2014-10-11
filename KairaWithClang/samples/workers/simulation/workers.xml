@@ -1,0 +1,113 @@
+<project name="workers" root-directory="/home/honza/Plocha/kaira-git/samples/workers" target_env="C++"><configuration><parameter default="120" description="" name="LIMIT" policy="mandatory" type="int" /><parameter default="10" description="" name="SIZE" policy="mandatory" type="int" /><build-option name="LIBS" /><build-option name="CFLAGS">-O2</build-option><head-code>
+struct Job {
+	Job() {};
+	Job(int start, int end) : start(start), end(end) {}
+	int start;
+	int end;
+
+	void pack(ca::Packer &amp;p) const {
+		p &lt;&lt; start &lt;&lt; end;
+	}
+
+	void unpack(ca::Unpacker &amp;p) {
+		p &gt;&gt; start &gt;&gt; end;
+	}
+	
+	std::string token_name() const {
+		std::stringstream s;
+		s &lt;&lt; "Job [" &lt;&lt; start &lt;&lt; "," &lt;&lt; end &lt;&lt; ")";
+		return s.str();
+	}
+};
+
+Job jj;
+
+
+
+
+</head-code></configuration><description>&lt;project library-octave="False" library-rpc="False" target_env="C++"&gt;&lt;configuration&gt;&lt;parameter default="120" description="" name="LIMIT" policy="mandatory" type="int" /&gt;&lt;parameter default="10" description="" name="SIZE" policy="mandatory" type="int" /&gt;&lt;build-option name="LIBS" /&gt;&lt;build-option name="CFLAGS"&gt;-O2&lt;/build-option&gt;&lt;head-code&gt;
+struct Job {
+	Job() {};
+	Job(int start, int end) : start(start), end(end) {}
+	int start;
+	int end;
+
+	void pack(ca::Packer &amp;amp;p) const {
+		p &amp;lt;&amp;lt; start &amp;lt;&amp;lt; end;
+	}
+
+	void unpack(ca::Unpacker &amp;amp;p) {
+		p &amp;gt;&amp;gt; start &amp;gt;&amp;gt; end;
+	}
+	
+	std::string token_name() const {
+		std::stringstream s;
+		s &amp;lt;&amp;lt; "Job [" &amp;lt;&amp;lt; start &amp;lt;&amp;lt; "," &amp;lt;&amp;lt; end &amp;lt;&amp;lt; ")";
+		return s.str();
+	}
+};
+
+Job jj;
+
+
+
+
+&lt;/head-code&gt;&lt;/configuration&gt;&lt;net id="0" name="Main"&gt;&lt;place id="103" label-x="38" label-y="255" name="counter" radius="20" sx="4" sy="0" x="38" y="255"&gt;&lt;place-type x="65" y="271"&gt;int&lt;/place-type&gt;&lt;init x="52" y="222"&gt;[0]&lt;/init&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;place id="104" label-x="186" label-y="252" name="ready" radius="20" sx="0" sy="0" x="186" y="252"&gt;&lt;place-type x="203" y="269"&gt;int&lt;/place-type&gt;&lt;init x="203" y="227"&gt;ca::range(1, ctx.process_count())&lt;/init&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;place id="105" label-x="415" label-y="165" name="" radius="22" sx="0" sy="0" x="415" y="165"&gt;&lt;place-type x="432" y="182"&gt;Job&lt;/place-type&gt;&lt;init x="432" y="135" /&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;place id="106" label-x="270" label-y="360" name="results" radius="20" sx="0" sy="0" x="270" y="360"&gt;&lt;place-type x="287" y="377"&gt;int&lt;/place-type&gt;&lt;init x="287" y="330" /&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;transition clock="False" collective="False" id="107" label-x="258" label-y="116" name="divide" priority="" sx="90" sy="35" x="192" y="90"&gt;&lt;guard x="192" y="70"&gt;start &amp;lt; param::LIMIT()&lt;/guard&gt;&lt;trace&gt;fire&lt;/trace&gt;&lt;verif-occurrence binding="False" process="True" /&gt;&lt;/transition&gt;&lt;transition clock="False" collective="False" id="108" label-x="431" label-y="262" name="compute" priority="" sx="70" sy="35" x="380" y="235"&gt;&lt;guard x="380" y="215" /&gt;&lt;code&gt;	int vvuvu;
+	for (vvuvu=var.job.start; vvuvu &amp;lt; var.job.end; vvuvu++) {
+	
+		if (vvuvu &amp;lt; 2) continue;
+		int s;
+		s = 2;
+		while( (s*s) &amp;lt;= vvuvu) {
+			if ((vvuvu % s) == 0) {
+				break;
+			}
+			s++;
+			
+		}
+		if (s*s &amp;gt; vvuvu) {
+			var.results.add(vvuvu);
+		}
+
+	}
+	
+	
+	
+		 
+&lt;/code&gt;&lt;trace&gt;fire&lt;/trace&gt;&lt;verif-occurrence binding="True" process="False" /&gt;&lt;/transition&gt;&lt;transition clock="False" collective="False" id="109" label-x="117" label-y="361" name="write result" priority="" sx="70" sy="35" x="82" y="343"&gt;&lt;guard x="82" y="323" /&gt;&lt;code&gt;	ca::Token&amp;lt;int&amp;gt; *t;
+		
+	for (t = var.results.begin(); t != NULL; t = var.results.next(t)) {
+		printf("%i\n", t-&amp;gt;value);
+	}
+	ctx.quit();
+	
+&lt;/code&gt;&lt;trace&gt;fire&lt;/trace&gt;&lt;verif-occurrence binding="False" process="True" /&gt;&lt;/transition&gt;&lt;edge from_item="103" id="110" to_item="107"&gt;&lt;inscription x="132.0" y="192.0"&gt;start&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="107" id="111" to_item="103"&gt;&lt;inscription x="51.0" y="88.0"&gt;start + param::SIZE()&lt;/inscription&gt;&lt;point x="37" y="107" /&gt;&lt;/edge&gt;&lt;edge from_item="104" id="112" to_item="107"&gt;&lt;inscription x="217.0" y="180.0"&gt;worker&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="105" id="113" to_item="108"&gt;&lt;inscription x="424.0" y="206.0"&gt;job&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="103" id="114" to_item="109"&gt;&lt;inscription x="0.0" y="305.0"&gt;param::LIMIT()&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="104" id="115" to_item="109"&gt;&lt;inscription x="159.0" y="301.0"&gt;[guard(size == ctx.process_count() - 1 ) ]&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="106" id="116" to_item="109"&gt;&lt;inscription x="173.0" y="345.0"&gt;[bulk] results&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="108" id="117" to_item="104"&gt;&lt;inscription x="260.0" y="258.0"&gt;ctx.process_id()@0&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="108" id="118" to_item="106"&gt;&lt;inscription x="316.0" y="344.0"&gt;[bulk] results@0&lt;/inscription&gt;&lt;point x="415" y="360" /&gt;&lt;/edge&gt;&lt;edge from_item="107" id="119" to_item="105"&gt;&lt;inscription x="313.0" y="88.0"&gt;Job(start, start + param::SIZE())@worker&lt;/inscription&gt;&lt;point x="415" y="107" /&gt;&lt;/edge&gt;&lt;/net&gt;&lt;/project&gt;</description><net id="0" name="Main"><place id="103" init-expr="[0]" name="counter" type="int" /><place id="104" init-expr="ca::range(1, ctx.process_count())" name="ready" type="int" /><place id="105" init-expr="" name="" type="Job" /><place id="106" init-expr="" name="results" type="int" /><transition clock="False" collective="False" guard="start &lt; param::LIMIT()" id="107" name="divide" priority=""><edge-in expr="start" id="110" place-id="103" /><edge-in expr="worker" id="112" place-id="104" /><edge-out expr="start + param::SIZE()" id="111" place-id="103" /><edge-out expr="Job(start, start + param::SIZE())@worker" id="119" place-id="105" /></transition><transition clock="False" collective="False" guard="" id="108" name="compute" priority=""><code>	int vvuvu;
+	for (vvuvu=var.job.start; vvuvu &lt; var.job.end; vvuvu++) {
+	
+		if (vvuvu &lt; 2) continue;
+		int s;
+		s = 2;
+		while( (s*s) &lt;= vvuvu) {
+			if ((vvuvu % s) == 0) {
+				break;
+			}
+			s++;
+			
+		}
+		if (s*s &gt; vvuvu) {
+			var.results.add(vvuvu);
+		}
+
+	}
+	
+	
+	
+		 
+</code><edge-in expr="job" id="113" place-id="105" /><edge-out expr="ctx.process_id()@0" id="117" place-id="104" /><edge-out expr="[bulk] results@0" id="118" place-id="106" /></transition><transition clock="False" collective="False" guard="" id="109" name="write result" priority=""><code>	ca::Token&lt;int&gt; *t;
+		
+	for (t = var.results.begin(); t != NULL; t = var.results.next(t)) {
+		printf("%i\n", t-&gt;value);
+	}
+	ctx.quit();
+	
+</code><edge-in expr="param::LIMIT()" id="114" place-id="103" /><edge-in expr="[guard(size == ctx.process_count() - 1 ) ]" id="115" place-id="104" /><edge-in expr="[bulk] results" id="116" place-id="106" /></transition></net></project>

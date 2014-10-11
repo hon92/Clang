@@ -1,0 +1,5 @@
+<project name="project1" root-directory="/home/honza/Plocha/kaira-git/testproject/project1" target_env="C++" tracing="True"><configuration><build-option name="LIBS" /><build-option name="CFLAGS">-O2</build-option><head-code>
+#include &lt;iostream&gt;
+ </head-code></configuration><description>&lt;project library-octave="False" library-rpc="False" target_env="C++"&gt;&lt;configuration&gt;&lt;build-option name="LIBS" /&gt;&lt;build-option name="CFLAGS"&gt;-O2&lt;/build-option&gt;&lt;head-code&gt;
+#include &amp;lt;iostream&amp;gt;
+ &lt;/head-code&gt;&lt;/configuration&gt;&lt;net id="101" name="project1"&gt;&lt;place id="103" label-x="-272" label-y="-43" name="x" radius="20" sx="0" sy="0" x="-272" y="-43"&gt;&lt;place-type x="-255" y="-26"&gt;int&lt;/place-type&gt;&lt;init x="-255" y="-73"&gt;[0]&lt;/init&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;/net&gt;&lt;/project&gt;</description><net id="101" name="project1"><place id="103" init-expr="[0]" name="x" type="int" /></net></project>

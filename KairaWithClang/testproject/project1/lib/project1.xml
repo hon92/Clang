@@ -1,0 +1,99 @@
+<project library-octave="False" library-rpc="False" name="project1" root-directory="/home/honza/Plocha/kaira-git/testproject/project1" target_env="C++"><configuration><build-option name="LIBS" /><build-option name="CFLAGS">-O2</build-option><head-code>
+
+int abc;
+double aaaaaa;
+int AAA;
+struct tt
+{
+tt()
+{
+
+}
+
+};
+
+class myvar
+{
+public:
+myvar()
+{
+
+}
+std::string token_name() const
+{
+return "myvar";
+}
+char * test()
+{
+
+return (char*)"aloha";
+}
+};
+
+myvar glob;
+</head-code></configuration><description>&lt;project library-octave="False" library-rpc="False" target_env="C++"&gt;&lt;configuration&gt;&lt;build-option name="LIBS" /&gt;&lt;build-option name="CFLAGS"&gt;-O2&lt;/build-option&gt;&lt;head-code&gt;
+
+int abc;
+double aaaaaa;
+int AAA;
+struct tt
+{
+tt()
+{
+
+}
+
+};
+
+class myvar
+{
+public:
+myvar()
+{
+
+}
+std::string token_name() const
+{
+return "myvar";
+}
+char * test()
+{
+
+return (char*)"aloha";
+}
+};
+
+myvar glob;
+&lt;/head-code&gt;&lt;/configuration&gt;&lt;net id="101" name="project1"&gt;&lt;place id="103" label-x="-332.0" label-y="-148.0" name="x" radius="20" sx="0" sy="0" x="-332.0" y="-148.0"&gt;&lt;place-type x="-315.0" y="-131.0"&gt;int&lt;/place-type&gt;&lt;init x="-315.0" y="-178.0"&gt;[0]&lt;/init&gt;&lt;code&gt;	
+	ctx.quit();
+&lt;/code&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;place id="106" label-x="-844.0" label-y="-151.0" name="y" radius="20" sx="0" sy="0" x="-844.0" y="-151.0"&gt;&lt;place-type x="-827.0" y="-134.0"&gt;int&lt;/place-type&gt;&lt;init x="-827.0" y="-181.0"&gt;[8]&lt;/init&gt;&lt;code&gt;place.add(5);
+int abc;
+place.add_token(new ca::Token&amp;lt;int&amp;gt;());
+	
+&lt;/code&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;place id="110" label-x="-770" label-y="85" name="var" radius="20" sx="0" sy="0" x="-770" y="85"&gt;&lt;place-type x="-753" y="102"&gt;myvar&lt;/place-type&gt;&lt;init x="-753" y="55"&gt;[glob]&lt;/init&gt;&lt;trace trace-tokens="False" /&gt;&lt;/place&gt;&lt;transition clock="False" collective="False" id="105" label-x="-602.0" label-y="-148.0" name="test" priority="" sx="70" sy="36" x="-637.0" y="-166.0"&gt;&lt;guard x="-623.0" y="-185.0"&gt;y &amp;gt; 5&lt;/guard&gt;&lt;code&gt;	var.y = 15;
+	
+&lt;/code&gt;&lt;/transition&gt;&lt;transition clock="False" collective="False" id="112" label-x="-592" label-y="88" name="none" priority="" sx="70" sy="36" x="-627" y="70"&gt;&lt;guard x="-627" y="50" /&gt;&lt;code&gt;	printf(var.v.test());
+	ctx.quit();
+	
+	
+	
+	
+	
+	
+&lt;/code&gt;&lt;/transition&gt;&lt;edge from_item="106" id="107" to_item="105"&gt;&lt;inscription x="-729.173799212" y="-149.548320335"&gt;y&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="105" id="108" to_item="103"&gt;&lt;inscription x="-458.732102013" y="-147.093863722"&gt;y+5&lt;/inscription&gt;&lt;/edge&gt;&lt;edge from_item="110" id="113" to_item="112"&gt;&lt;inscription x="-688.0" y="86.0"&gt;v&lt;/inscription&gt;&lt;/edge&gt;&lt;/net&gt;&lt;/project&gt;</description><net id="101" name="project1"><place id="103" init-expr="[0]" name="x" type="int"><code>	
+	ctx.quit();
+</code></place><place id="106" init-expr="[8]" name="y" type="int"><code>place.add(5);
+int abc;
+place.add_token(new ca::Token&lt;int&gt;());
+	
+</code></place><place id="110" init-expr="[glob]" name="var" type="myvar" /><transition clock="False" collective="False" guard="y &gt; 5" id="105" name="test" priority=""><code>	var.y = 15;
+	
+</code><edge-in expr="y" id="107" place-id="106" /><edge-out expr="y+5" id="108" place-id="103" /></transition><transition clock="False" collective="False" guard="" id="112" name="none" priority=""><code>	printf(var.v.test());
+	ctx.quit();
+	
+	
+	
+	
+	
+	
+</code><edge-in expr="v" id="113" place-id="110" /></transition></net></project>

@@ -1,0 +1,37 @@
+<project library-octave="False" library-rpc="False" target_env="C++"><configuration><build-option name="LIBS" /><build-option name="CFLAGS">-O2</build-option><head-code>int testing;
+double aaaaaa;
+int AAA;
+
+
+void test()
+{
+
+AAA = 25;
+
+}</head-code></configuration><net id="101" name="project1"><place id="103" label-x="-332" label-y="-148" name="x" radius="20" sx="0" sy="0" x="-332" y="-148"><place-type x="-315" y="-131">int</place-type><init x="-315" y="-178">[0]</init><code>	AAA = 11;
+	ctx.quit();
+	int abab;
+	abab = 15;
+	
+	asdasdad
+	
+	abab += abab * abab + 15;
+</code><trace trace-tokens="False" /></place><place id="106" label-x="-842" label-y="-151" name="y" radius="20" sx="0" sy="0" x="-842" y="-151"><place-type x="-825" y="-134">int</place-type><init x="-825" y="-181">[8]</init><code>place.add(5);
+testing = 15;
+place.add_token(new ca::Token&lt;int&gt;());
+  int eeee = 99;
+  AAA = 15165;
+  
+  
+  
+</code><trace trace-tokens="False" /></place><transition clock="False" collective="False" id="105" label-x="-603.0" label-y="-148.0" name="test" priority="" sx="70" sy="36" x="-638.0" y="-166.0"><guard x="-624.0" y="-185.0">y &gt; 5</guard><code>	var.y = 15;
+	int *intpointer;
+	testing = 9898;
+	AAA = 99;
+	
+	intpointer=new int(6);
+	
+</code></transition><edge from_item="106" id="107" to_item="105"><inscription x="-728.50815755" y="-149.000415828">y</inscription></edge><edge from_item="105" id="108" to_item="103"><inscription x="-458.493023256" y="-147.0">y+5</inscription></edge></net><net id="118" name="pro2"><place id="119" label-x="-381" label-y="-117" name="te" radius="20" sx="0" sy="0" x="-381" y="-117"><place-type x="-364" y="-100">std::string</place-type><init x="-364" y="-147">["de"]</init><code>	place.add("testing");
+</code><trace trace-tokens="False" /></place><place id="122" label-x="-1" label-y="-119" name="" radius="20" sx="0" sy="0" x="-1" y="-119"><place-type x="16" y="-102">std::string</place-type><init x="16" y="-149" /><trace trace-tokens="False" /></place><transition clock="False" collective="False" id="120" label-x="-225" label-y="-118" name="ss" priority="" sx="70" sy="36" x="-260" y="-136"><guard x="-260" y="-156" /><code>	var.s += var.s;
+	
+</code></transition><edge from_item="119" id="121" to_item="120"><inscription x="-310.0" y="-117.0">s</inscription></edge><edge from_item="120" id="123" to_item="122"><inscription x="-105.0" y="-118.0">s</inscription></edge></net></project>

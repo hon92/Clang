@@ -1,0 +1,583 @@
+
+Kaira User Guide
+=================
+
+Kaira is as an open-source development environment for MPI (Message Passing
+Interface) applications. We try to provide an unified environment for
+activities for development: prototyping, programming, testing, debugging,
+profiling, performance prediction and verification.
+
+The main idea is to use visual models inspired by Coloured Petri Nets.
+This model is designed to catch parallel aspects and communication inside of
+the developed application. We do not want to program applications completely
+in a visual way, so our models can be enriched by any sequential C++ code.
+With such model, a user can generate MPI applications, run simulations
+or start a state-space analysis.
+
+.Prerequisites
+************
+In this text, we assume that the reader is familiar with C++ and basic use
+of Linux.
+************
+
+Installation
+------------
+
+Instructions for Debian based distributions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.Full installation - Instructions for Debian based distributions
+***************************************************************
+
+These steps describe how to install the *full* version of Kaira.
+How to disable some of subsystems is described below.
+
+  - Installation of necessary packages
+
+  $ apt-get install python-gtksourceview2 python-pyparsing g++ python-matplotlib
+
+  - Installation of MPI implementation
+
+  $ apt-get install mpich2
+
+  - Libraries for verification subsystem
+
+  $ apt-get install sparsehash libmhash-dev
+
+  - Octave
+
+  $ apt-get install liboctave-dev
+
+  - Documentation
+
+  $ apt-get install asciidoc source-highlight
+
+  - Configure Kaira
+
+  $ ./waf configure
+
+  - Build Kaira
+
+  $ ./waf
+
+  - Start Kaira
+
+  $ ./start.sh
+
+************
+
+.Minimal installation - Instructions for Debian based distributions
+******************************************************************
+
+These steps describe how to install the a *minimal* version of Kaira,
+where some features are disabled.
+
+  - Installation of necessary packages
+
+  $ apt-get install python-gtksourceview2 python-pyparsing g++ python-matplotlib
+
+  - Configure Kaira
+
+  $ ./waf configure --disable-octave --disable-verif --disable-doc
+
+  - Build Kaira
+
+  $ ./waf
+
+  - Start Kaira
+
+  $ ./start.sh
+
+************
+
+Instruction for Arch
+~~~~~~~~~~~~~~~~~~~~
+
+.Full installation - Instructions for Arch based distributions
+**************************************************************
+
+These steps describe how to install the *full* version of Kaira.
+
+  - Installation of necessary packages
+
+  $ pacman -S gcc python2 python2-virtualenv pygtk pygtksourceview2 \
+    python2-pyparsing python2-matplotlib
+
+  - Libraries for verification subsystem
+
+  $ pacman -S sparsehash mhash
+
+  - Octave
+
+  $ pacman -S octave
+
+  - Documentation
+
+  $ pacman -S asciidoc source-highlight
+
+  - Installation of MPI implementation (available from AUR)
+
+  $ bash <(curl aur.sh) -si sowing mpich
+
+  - Set up Python 2 environment
+
+  $ virtualenv2 --system-site-packages venv
+  $ source venv/bin/activate
+
+  - Configure Kaira
+
+  $ ./waf configure
+
+  - Build Kaira
+
+  $ ./waf
+
+  - Start Kaira
+
+  $ ./start.sh
+
+  - To start Kaira next time in a clean shell session, you need to enter Python 2 environment first
+
+  $ source venv/bin/activate
+  $ ./start.sh
+
+************
+
+The following text covers the installation process in more detail.
+
+Dependencies
+~~~~~~~~~~~~
+
+To run Kaira, you need the following software.
+
+  - Linux
+    * In general, Kaira should run on any UNIX-like systems where the
+     following programs and libraries are available, but it was tested
+      only on Linux systems.
+  - Python 2.6 or 2.7
+  - PyGTK
+  - PyGTK sourceview2
+  - pyparsing
+  - g++
+  - matplotlib
+
+Optional dependencies:
+
+  - MPI implementation (tested with: MPICH2, OpenMPI, LAM)
+  - Octave
+  - sparsehash
+  - mhash
+  - asciidoc
+
+MPI implementation is necessary if you want to build MPI applications.
+Libraries 'sparsehash' and 'mhash' are used by the verification subsystem.
+'asciidoc' is used to build HTML documentation.
+
+
+Building
+~~~~~~~~
+
+The first step is to download Kaira distribution from http://verif.cs.vsb.cz
+and unpack it. Kaira is built by building tool 'waf'
+(http://code.google.com/p/waf/). This tool is distributed together with Kaira.
+The most common scenario (with all dependancies installed) is the following:
+
+-------------------------------------------------------------------------------
+cd /path/to/kaira
+./waf configure             # Configuration step
+./waf                       # Building step
+-------------------------------------------------------------------------------
+
+It's all. To check that Kaira works, you can start it by
+
+-------------------------------------------------------------------------------
+./start.sh
+-------------------------------------------------------------------------------
+
+More about configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the configuration step, additional parameters can be specified.
+The basic ones are:
+
+- '--disable-mpi' -- Kaira is built without MPI support
+- '--disable-octave' -- Building Octave modules are disabled
+- '--disable-verif' -- Kaira is built without the verification support,
+  i.e. libraries 'sparsehash' and 'libmhash' are not necessary
+- '--disable-doc' -- Documentation is not generated
+- '--icc' -- Intel's C++ complier is used to build Kaira instead of GCC.
+
+For example, when we want to build Kaira without the support of MPI
+and without generating documentation:
+
+-------------------------------------------------------------------------------
+./waf configure --disable-mpi --disable-doc  # Configuration step
+./waf                                        # Building step
+-------------------------------------------------------------------------------
+
+The full list of parameters can be displayed by
+
+-------------------------------------------------------------------------------
+./waf configure --help
+-------------------------------------------------------------------------------
+
+Binding user-defined types
+--------------------------
+
+This section describes how can be user-defined types used in the visual
+program. Each such type needs function 'token_name' and optionally 'pack' and
+'unpack'. For standard types listed in Section <<Types,
+Supported standard types>>, all these functions are already defined, hence no
+additional definition is needed to use them. In the following text, it is shown
+how to define these functions for user-defined types.
+
+token_name
+~~~~~~~~~~
+
+This function is to used to obtain a textual representation of a token that is
+used during visual simulations. It is used only for informative puproses,
+hence an arbitrary string can be returned without influence on an actual run of
+the program.
+
+Let us assume that we want to use the following user-defined type in Kaira:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Point3D {
+	double x, y, z;
+}
+-------------------------------------------------------------------------------
+
+There are two ways how to define 'token_name' for this type, _invasive_ and
+_non-invasive_. The former means just placing method 'token_name' directly into
+the class. For example:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Point3D {
+	double x, y, z;
+
+	std::string token_name() const { // 'const' is important here!
+		std::stringstream s;
+		s << x << " " << y << " " << z;
+		return s.str();
+	}
+}
+-------------------------------------------------------------------------------
+
+In some cases, when we do not want or we cannot modifiy the original class;
+therefore there is a non-invasive version of 'token_name'; it can be defined
+as follows:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Point3D {
+	double x, y, z;
+}
+
+namespace ca {
+	CA_TOKEN_NAME(Point3D, point) {
+		std::stringstream s;
+		s << point.x << " " << point.y << " " << point.z;
+		return s.str();
+	}
+
+}
+-------------------------------------------------------------------------------
+
+The first parameter of macro 'CA_TOKEN_NAME' is the name of the type, the
+second one is the name of the variable with a token in the function
+body. Please note, that it is necessary to place this definition into
+namespace 'ca'.
+
+pack & unpack
+~~~~~~~~~~~~~
+
+If the user-defined type is used for tokens that is transferred between
+processes, it is also necessary to define serialization functions called as
+'pack' and 'unpack'.
+
+Let us assume type 'Point3D' from the previous example. It is a simple
+structure of basic types, hence such structure can be simply copied. In such
+cases, we can just mark the structure as 'trivially packable' by the following
+code:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Point3D {
+	double x, y, z;
+}
+
+namespace ca { // namespace 'ca' is important!
+	CA_TRIVIALLY_PACKABLE(Point3D)
+}
+-------------------------------------------------------------------------------
+
+In case, the class is not trivially packable, we have to write 'pack' and
+'unpack' functions. Assume the following type:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Person {
+	std::string name;
+	int age;
+}
+-------------------------------------------------------------------------------
+
+Because of the usage of 'std::string', we cannot simply copy the data. There
+are again 'intrusive' and 'non-intrusive' ways. The first example demonstrates
+the former ('token_name' is now ommited):
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Person {
+	std::string name;
+	int age;
+
+	void pack(ca::Packer &packer) const { // 'const' is important!
+		packer << name << age;
+	}
+
+	void unpack(ca::Unacker &unpacker) {
+		packer >> name >> age;
+	}
+}
+-------------------------------------------------------------------------------
+
+and the non-intrusive way with the same effect:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+struct Person {
+	std::string name;
+	int age;
+}
+
+namespace ca { // namespace 'ca' is important
+
+	CA_PACK(Person, packer, person) {
+		packer << person.name << person.age;
+	}
+
+	CA_UNPACK(Person, unpacker, person) {
+		unpacker >> person.name >> person.age;
+	}
+}
+-------------------------------------------------------------------------------
+
+Fixed size
+^^^^^^^^^^
+
+In some cases, we can have a C++ type that is not trivially copyable but it is
+always packed with the same size. Assume the following example:
+
+[source,cpp]
+-------------------------------------------------------------------------------
+class Row {
+
+	public:
+		Row() {
+			data = new double[param::SIZE()];
+		}
+
+		~Row() {
+			delete [] data;
+		}
+
+		// ... skipped some other methods ...
+		// ... at least copy constructor & assign operator
+
+		void pack(ca::Packer &packer) const {
+			for (int i = 0; i < param::SIZE(); i++) {
+				packer << data[i];
+			}
+		}
+
+		void unpack(ca::Unacker &unpacker) {
+			for (int i = 0; i < param::SIZE(); i++) {
+				unpacker >> data[i];
+			}
+		}
+
+	private:
+		double *data;
+
+}
+-------------------------------------------------------------------------------
+
+The size of packed data of this class is not constant, but for each run it is
+a fixed number because it depends only on parameter ''SIZE''. We can tell Kaira
+this fact by following code.
+
+[source,cpp]
+-------------------------------------------------------------------------------
+namespace ca { // namespace 'ca' is important
+	CA_FIXED_SIZE(Row) {
+		// How much memory it needs to pack Row
+		return sizeof(double) * param::SIZE();
+	}
+}
+-------------------------------------------------------------------------------
+
+Create such code is not mandatory, but it allows Kaira to generate more
+efficient code, especially in case of collective communication.
+
+
+Public C++ API
+--------------
+
+Namespace ca
+~~~~~~~~~~~~
+
+Class ca::Context
+^^^^^^^^^^^^^^^^^
+
+int process_id() :: returns rank of the process
+int process_count() :: returns number of processes
+void quit() :: terminates the program (or the function call when the project
+               is built as a library)
+
+Class ca::TokenList<T>
+^^^^^^^^^^^^^^^^^^^^^^
+
+This class represents a list of tokens.
+
+void add(T value) :: creates new token and adds it into the list.
+void add_token(ca::Token<T> *token) :: adds a token into the list.
+void remove(ca::Token<T> *token) :: removes a token from the list.
+void clear() :: removes all tokens from the list and deletes them.
+Token<T>* last() :: returns the last token in the list.
+Token<T>* begin() :: returns the first token in the list.
+size_t size() const :: returns number of tokens in the list.
+bool is_empty() const :: returns true if the list is empty.
+void overtake(TokenList<T> &list) :: takes all tokens from list in an efficient way.
+
+Class ca::Clock
+^^^^^^^^^^^^^^^
+
+void tick() :: see *tock()*
+ca::IntTime tock() :: returns the number of nanoseconds from last call of *tick()*.
+
+Functions
+^^^^^^^^^
+
+ca::token_name(T &value) :: returns text representation of token value of type T for
+                            the visual simulation.
+                            This function is predefined for types listed in
+                            Section <<Types, Supported standard types>>.
+ca::pack(ca::Packer &packer, const T &value) :: serializes type T.
+                            This function is predefined for types listed in
+                            Section <<Types, Supported standard types>>.
+
+template<> T ca::unpack(ca::Unpacker &unpacker) :: deserializes type T.
+                            This function is predefined for types listed in
+                            Section <<Types, Supported standard types>>.
+
+
+ca::direct_pack(ca::Packer &packer, const T &value) ::
+    Serialization for trivially copyable types
+ca::direct_unpack(ca::Unpacker &unpacker) ::
+    Deserialization for trivially copyable types
+
+std::vector<int> ca::range(int from, int upto) ::
+    returns vector of integeres in range [from, upto)
+
+Namespace casr
+~~~~~~~~~~~~~~
+
+Class casr::Context
+^^^^^^^^^^^^^^^^^^^
+Inherits from *ca::Context*
+
+ca::IntTime time() ::
+    returns current time from start of the simulation in nanoseconds
+int ca::get_packets_count(int process_id1, int process_id2) ::
+    returns the number of packets sent from process_id1 to process_id2
+    that are currenlty on the way (that was not received).
+int ca::get_data_size(int process_id1, int process_id2) ::
+    returns the total size of packets sent from process_id1 to process_id2
+    that are currently on the way.
+std::deque<casr::Packet> ca::get_data_size(int process_id1, int process_id2) ::
+    returns the qeueu with packets sent from process_id1 to process_id2
+    that are currently on the way.
+
+Struct casr::Packet
+^^^^^^^^^^^^^^^^^^^
+
+ca::IntTime start_time :: when was the packet sent
+ca::IntTime release_time :: the earliest time when the packet can be received
+int from_process :: process id of the sender
+size_t size :: size of the packet
+void *data :: data of the packet
+
+[[Types]]
+Supported standard types
+------------------------
+
+The following types are natively supported by Kaira, so the user does not have
+to write own 'token_name', 'pack' and 'unpack' functions.
+
+  - bool
+  - char
+  - unsigned char
+  - int
+  - unsigned int
+  - long
+  - unsigned long
+  - long long
+  - unsigned long long
+  - double
+  - float
+  - std::string
+  - std::vector<T>
+  - std::pair<T1, T2>
+  - void* (Only numerical value of pointer is packed/unpacked)
+
+
+Arguments of generated programs
+-------------------------------
+
+Release mode
+~~~~~~~~~~~~
+
+-p *NAME=VALUE* :: Set the project parameter *NAME*
+-r *N* :: Set the number of processes
+    (only in threads version;
+     in MPI version is done through the parameter of 'mpirun')
+-h --help :: Print the description of project parameters
+-s *PORT* :: The application listens on defined *PORT*. *PORT* can be 'auto',
+    then application chooses some free port and print it on stdout as
+    the first line.
+-b :: Block the application immediately after its initialization and
+      wait for the first connection via port defined by -s argument.
+-S :: Sequential mode. The application runs sequentially independently on
+     number of processes or threads.
+
+
+Trace mode
+~~~~~~~~~~
+
+All arguments from 'release mode' are allowed.
+
+-T *SIZE* :: Enables tracelogging with an in-memory buffer of *SIZE* bytes for
+    each process. The following suffixes can be used for in *SIZE*: K, M or G.
+
+
+Simrun mode
+~~~~~~~~~~~
+
+All arguments from 'trace mode' are allowed.
+
+Statespace mode
+~~~~~~~~~~~~~~~
+
+Arguments '-p', '-h', '-r' from 'release mode' are supported.
+
+-Vdeadlock :: Deadlock detection is performed
+-Vdisable-por :: Disable Partial-Order-Reduction method
+-Vdot :: The graph of the statespace is saved as 'statespace.dot'
+-Vcycle :: Detection of a cyclic computation is performed
+-Vfmarking :: Uniqueness of final markings
+-Vsilent :: Program will not write information messages about progress of the statespace analysis
+-Vtchv :: Uniqueness of characteristic transition vectors
+-Vwrite-statespace :: The graph of the statespace is saved into the resulting kreport
